@@ -25,10 +25,11 @@ class RegistrationRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'email' => 'required|email|unique:users',
+            'number' => 'required|string',
             'password' => 'required|min:6',
             'password_confirmation' => 'required|same:password',
-            'photo' => 'required|image|max:2048',
+            'username' => 'required|unique:users',
+            'userRole'=>'required'
         ];
     }
 }

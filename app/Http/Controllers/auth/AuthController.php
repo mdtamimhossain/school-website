@@ -9,6 +9,8 @@ use App\Http\Requests\Auth\VerificationRequest;
 use App\Http\Requests\Auth\TeacherRegistrationRequest;
 use App\Http\Services\auth\AuthService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
+use Laravel\Passport\TokenRepository;
 use function App\Helpers\randomNumber;
 
 class AuthController extends Controller
@@ -46,43 +48,14 @@ class AuthController extends Controller
         return response()->json($this->service->processRegistration($request->all()));
 
     }
-    public function verification (VerificationRequest $request): JsonResponse
-    {
 
-        return response()->json($this->service->processVerification($request->all()));
 
-    }
 
-    public function teacherRegister (TeacherRegistrationRequest $request): JsonResponse
-    {
-
-        return response()->json($this->service->teacherRegistration($request->all()));
-
-    }
-    public function teacherVerification (VerificationRequest $request): JsonResponse
-    {
-
-        return response()->json($this->service->teacherVerification($request->all()));
-
-    }
-
-    /**
-     * @param VerificationRequest $request
-     * @return JsonResponse
-     */
-    public function verify (VerificationRequest $request): JsonResponse
-    {
-
-        return response()->json($this->service->processVerification($request->all()));
-
-    }
-
-    /**
-     * @return JsonResponse
-     */
     public function logout():JsonResponse
     {
         return response()->json($this->service->logout());
+       //return response()->json(Auth::user()->token());
+
     }
     public function teacherLogout():JsonResponse
     {
