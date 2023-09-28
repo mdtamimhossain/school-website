@@ -25,7 +25,6 @@ class addUserInfoRequest extends FormRequest
     {
         return [
             'user_id' => 'required',
-            'className' => 'required',
             'fullName' => 'required',
             'birthdate' => 'required',
             'fatherName' => 'required',

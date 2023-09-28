@@ -10,6 +10,7 @@ use App\Models\course;
 use App\Models\Teacher;
 use App\Models\User;
 use App\Models\UserInfo;
+use App\Models\Video;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use function Webmozart\Assert\Tests\StaticAnalysis\length;
@@ -56,6 +57,26 @@ class adminService extends Service
         try{
             $users=User::all();
             return $this->responseSuccess('All Users',['users'=>$users]);
+        }catch (\Exception $exception)
+        {
+            return $this->responseError($exception->getMessage());
+        }
+    }
+    public function allStudent(): array
+    {
+        try{
+            $users=User::where('userRole','student')->get;
+            return $this->responseSuccess('All Students',['users'=>$users]);
+        }catch (\Exception $exception)
+        {
+            return $this->responseError($exception->getMessage());
+        }
+    }
+    public function allTeacher(): array
+    {
+        try{
+            $users=User::where('userRole','teacher')->get;
+            return $this->responseSuccess('All Teachers',['users'=>$users]);
         }catch (\Exception $exception)
         {
             return $this->responseError($exception->getMessage());
@@ -111,5 +132,41 @@ class adminService extends Service
         }
     }
 
+    public function uploadVideo(array $data): array
+    {
+        try{
 
+            $videoPath = $data['video']->store(`public/video`);
+            Video::create([
+                'caption'=>$data['caption'],
+                'video'=>$videoPath
+            ]);
+            return $this->responseSuccess('video upload  successfully');
+        }catch (\Exception $exception)
+        {
+            return $this->responseError($exception->getMessage());
+        }
+    }
+    public function allVideo(): array
+    {
+        try{
+
+            $videos=Video::all();
+            return $this->responseSuccess('All Video',['videos'=>$videos]);
+        }catch (\Exception $exception)
+        {
+            return $this->responseError($exception->getMessage());
+        }
+    }
+    public function deleteVideo($id): array
+    {
+        try{
+            $video=Video::find($id);
+            $video->delete();
+            return $this->responseSuccess('Video Deleted Successfully');
+        }catch (\Exception $exception)
+        {
+            return $this->responseError($exception->getMessage());
+        }
+    }
 }

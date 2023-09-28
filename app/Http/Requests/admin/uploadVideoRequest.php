@@ -4,7 +4,7 @@ namespace App\Http\Requests\admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class updateUserInfoRequest extends FormRequest
+class uploadVideoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,14 +24,9 @@ class updateUserInfoRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => 'required',
-            'fullName' => 'required',
-            'birthdate' => 'required',
-            'fatherName' => 'required',
-            'motherName' => 'required',
-            'address' => 'required',
-            'email'=>'required',
-            'number'=>'required'
+            'caption' => 'required',
+            'video' => 'required|mimetypes:video/mp4',
+
         ];
     }
 }

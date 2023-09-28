@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\admin\addUserInfoRequest;
 use App\Http\Requests\admin\courseUploadRequest;
 use App\Http\Requests\admin\updateUserInfoRequest;
+use App\Http\Requests\admin\uploadVideoRequest;
 use App\Http\Requests\student\courseEnrollRequest;
 use App\Http\Requests\student\postCommentRequest;
 use App\Http\Requests\teacher\courseRequest;
@@ -44,6 +45,18 @@ class adminController extends Controller
         return response()->json($this->service->allUser());
 
     }
+    public function getAllStudent(): JsonResponse
+    {
+
+        return response()->json($this->service->allStudent());
+
+    }
+    public function getAllTeacher(): JsonResponse
+    {
+
+        return response()->json($this->service->allTeacher());
+
+    }
     public function addUserInfo(addUserInfoRequest $request): JsonResponse
     {
 
@@ -60,6 +73,24 @@ class adminController extends Controller
     {
 
         return response()->json($this->service->updateUserInfo($request->all()));
+
+    }
+    public function uploadVideo(uploadVideoRequest $request): JsonResponse
+    {
+
+        return response()->json($this->service->uploadVideo($request->all()));
+
+    }
+    public function deleteVideo($id): JsonResponse
+    {
+
+        return response()->json($this->service->deleteVideo($id));
+
+    }
+    public function allVideo(): JsonResponse
+    {
+
+        return response()->json($this->service->allVideo());
 
     }
 
