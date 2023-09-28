@@ -21,3 +21,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 require('routes/api/auth.php');
+require('routes/api/admin.php');
