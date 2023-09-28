@@ -3,16 +3,14 @@
 namespace App\Http\Services\admin;
 
 use App\Http\Services\Service;
-use App\Jobs\ApplicationEmails;
-use App\Jobs\SendEmails;
-use App\Models\Category;
 use App\Models\course;
-use App\Models\Teacher;
+use App\Models\Result;
 use App\Models\User;
 use App\Models\UserInfo;
 use App\Models\Video;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use function Webmozart\Assert\Tests\StaticAnalysis\length;
 
 class adminService extends Service
@@ -62,10 +60,24 @@ class adminService extends Service
             return $this->responseError($exception->getMessage());
         }
     }
+    public function searchUser(array $data): array
+    {
+        try{
+            $searchString=$data['string'];
+            $users = User::where('name', 'LIKE', "%$searchString%")
+                ->orWhere('username', 'LIKE', "%$searchString%")
+                ->get();
+
+            return $this->responseSuccess('Search Related User',['users'=>$users]);
+        }catch (\Exception $exception)
+        {
+            return $this->responseError($exception->getMessage());
+        }
+    }
     public function allStudent(): array
     {
         try{
-            $users=User::where('userRole','student')->get;
+            $users=User::where('userRole','student')->get();
             return $this->responseSuccess('All Students',['users'=>$users]);
         }catch (\Exception $exception)
         {
@@ -75,7 +87,7 @@ class adminService extends Service
     public function allTeacher(): array
     {
         try{
-            $users=User::where('userRole','teacher')->get;
+            $users=User::where('userRole','teacher')->get();
             return $this->responseSuccess('All Teachers',['users'=>$users]);
         }catch (\Exception $exception)
         {
@@ -136,7 +148,7 @@ class adminService extends Service
     {
         try{
 
-            $videoPath = $data['video']->store(`public/video`);
+            $videoPath = $data['video']->store('video', 'public');
             Video::create([
                 'caption'=>$data['caption'],
                 'video'=>$videoPath
@@ -162,8 +174,79 @@ class adminService extends Service
     {
         try{
             $video=Video::find($id);
+            $filepath='public/' .$video->video;
+            if (Storage::exists($filepath))
+            {
+                Storage::delete($filepath);
+            }
             $video->delete();
             return $this->responseSuccess('Video Deleted Successfully');
+        }catch (\Exception $exception)
+        {
+            return $this->responseError($exception->getMessage());
+        }
+    }
+    public function uploadResult(array $data): array
+    {
+        try{
+            $filePath = $data['resultSheet']->store('resultSheet', 'public');
+            Result::create([
+                'title'=>$data['title'],
+                'courseName'=>$data['courseName'],
+                'className'=>$data['className'],
+                'courseId'=>$data['courseId'],
+                'resultSheet'=>$filePath,
+            ]);
+            return $this->responseSuccess('Result sheet uploaded successfully ');
+        }catch (\Exception $exception)
+        {
+            return $this->responseError($exception->getMessage());
+        }
+    }
+    public function deleteResult($id): array
+    {
+        try{
+            $result=Result::find($id);
+            $filepath='public/' .$result->resultSheet;
+            if (Storage::exists($filepath))
+            {
+                Storage::delete($filepath);
+            }
+            $result->delete();
+            return $this->responseSuccess('Result sheet Deleted Successfully');
+        }catch (\Exception $exception)
+        {
+            return $this->responseError($exception->getMessage());
+        }
+    }
+    public function getResult($id): array
+    {
+        try{
+            $results=Result::where('courseId',$id)->where('disable',false)->get();
+            return $this->responseSuccess('All Result related this course',['results'=>$results]);
+        }catch (\Exception $exception)
+        {
+            return $this->responseError($exception->getMessage());
+        }
+    }
+    public function searchResult(array $data): array
+    {
+        try{
+            $searchString=$data['string'];
+            $results = Result::where('disable',false)->where('courseName', 'LIKE', "%$searchString%")
+                ->orWhere('title', 'LIKE', "%$searchString%")
+                ->get();
+            return $this->responseSuccess('All Result related your search',['results'=>$results]);
+        }catch (\Exception $exception)
+        {
+            return $this->responseError($exception->getMessage());
+        }
+    }
+    public function disableResult($id): array
+    {
+        try{
+            Result::where('id',$id)->update(['disable'=>true]);
+            return $this->responseSuccess('Disable result sheet successfully');
         }catch (\Exception $exception)
         {
             return $this->responseError($exception->getMessage());

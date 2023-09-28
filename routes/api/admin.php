@@ -9,6 +9,7 @@ Route::middleware(['auth:api','admin'])->prefix('/v1/admin')->group(function (){
     Route::POST('/course-delete/{id}', [adminController::class, 'courseDelete']);
     Route::get('/all-course', [adminController::class, 'allCourse']);
     Route::get('/all-user', [adminController::class, 'getAllUser']);
+    Route::post('/search-user', [adminController::class, 'searchUser']);
     Route::get('/all-student', [adminController::class, 'getAllStudent']);
     Route::get('/all-teacher', [adminController::class, 'getAllTeacher']);
     Route::post('/add-user-info', [adminController::class, 'addUserInfo']);
@@ -17,6 +18,15 @@ Route::middleware(['auth:api','admin'])->prefix('/v1/admin')->group(function (){
 
     Route::post('/upload-video', [adminController::class, 'uploadVideo']);
     Route::post('/delete-video/{id}', [adminController::class, 'deleteVideo']);
-    Route::post('/all-video', [adminController::class, 'allVideo']);
+    Route::get('/all-video', [adminController::class, 'allVideo']);
+
+    Route::post('/upload-result', [adminController::class, 'uploadResult']);
+    Route::post('/delete-result/{id}', [adminController::class, 'deleteResult']);
+    Route::post('/disable-result/{id}', [adminController::class, 'disableResult']);
+    //find result based on course
+    Route::get('/get-result/{id}', [adminController::class, 'getResult']);
+    Route::post('/search-result', [adminController::class, 'searchResult']);
+
+
 
 });

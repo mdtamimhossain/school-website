@@ -4,6 +4,9 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\admin\addUserInfoRequest;
 use App\Http\Requests\admin\courseUploadRequest;
+use App\Http\Requests\admin\resultUploadRequest;
+use App\Http\Requests\admin\searchResultRequest;
+use App\Http\Requests\admin\searchUserRequest;
 use App\Http\Requests\admin\updateUserInfoRequest;
 use App\Http\Requests\admin\uploadVideoRequest;
 use App\Http\Requests\student\courseEnrollRequest;
@@ -43,6 +46,12 @@ class adminController extends Controller
     {
 
         return response()->json($this->service->allUser());
+
+    }
+    public function searchUser(searchUserRequest $request): JsonResponse
+    {
+
+        return response()->json($this->service->searchUser($request->all()));
 
     }
     public function getAllStudent(): JsonResponse
@@ -91,6 +100,36 @@ class adminController extends Controller
     {
 
         return response()->json($this->service->allVideo());
+
+    }
+    public function uploadResult(resultUploadRequest $request): JsonResponse
+    {
+
+        return response()->json($this->service->uploadResult($request->all()));
+
+    }
+    public function deleteResult($id): JsonResponse
+    {
+
+        return response()->json($this->service->deleteResult($id));
+
+    }
+    public function getResult($id): JsonResponse
+    {
+
+        return response()->json($this->service->getResult($id));
+
+    }
+    public function searchResult(searchResultRequest $request): JsonResponse
+    {
+
+        return response()->json($this->service->searchResult($request->all()));
+
+    }
+    public function disableResult($id): JsonResponse
+    {
+
+        return response()->json($this->service->disableResult($id));
 
     }
 
