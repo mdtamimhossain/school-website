@@ -27,6 +27,7 @@ class AuthService extends Service
     public function processLogin (array $data): array
     {
         try {
+
             $user = User::where('username', $data['username'])->first();
             if (!$user) {
 

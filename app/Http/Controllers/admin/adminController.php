@@ -132,6 +132,30 @@ class adminController extends Controller
         return response()->json($this->service->disableResult($id));
 
     }
+    public function pendingApplication(): JsonResponse
+    {
+
+        return response()->json($this->service->pendingApplication());
+
+    }
+    public function getCompleteApplication(): JsonResponse
+    {
+
+        return response()->json($this->service->getCompleteApplication());
+
+    }
+    public function completeApplication($id): JsonResponse
+    {
+
+        return response()->json($this->service->completeApplication($id));
+
+    }
+    public function getApplication($id): JsonResponse
+    {
+
+        return response()->json($this->service->getApplication($id));
+
+    }
 
 
 }

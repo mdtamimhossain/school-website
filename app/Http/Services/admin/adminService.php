@@ -3,6 +3,7 @@
 namespace App\Http\Services\admin;
 
 use App\Http\Services\Service;
+use App\Models\Admission;
 use App\Models\course;
 use App\Models\Result;
 use App\Models\User;
@@ -247,6 +248,46 @@ class adminService extends Service
         try{
             Result::where('id',$id)->update(['disable'=>true]);
             return $this->responseSuccess('Disable result sheet successfully');
+        }catch (\Exception $exception)
+        {
+            return $this->responseError($exception->getMessage());
+        }
+    }
+    public function pendingApplication(): array
+    {
+        try{
+            $applications=Admission::where('status','pending')->get();
+            return $this->responseSuccess('ALl pending application',['applications'=>$applications]);
+        }catch (\Exception $exception)
+        {
+            return $this->responseError($exception->getMessage());
+        }
+    }
+    public function getCompleteApplication(): array
+    {
+        try{
+            $applications=Admission::where('status','complete')->get();
+            return $this->responseSuccess('ALl complete application',['applications'=>$applications]);
+        }catch (\Exception $exception)
+        {
+            return $this->responseError($exception->getMessage());
+        }
+    }
+    public function getApplication($id): array
+    {
+        try{
+            $application=Admission::find($id);
+            return $this->responseSuccess('Single application',['application'=>$application]);
+        }catch (\Exception $exception)
+        {
+            return $this->responseError($exception->getMessage());
+        }
+    }
+    public function completeApplication($id): array
+    {
+        try{
+           Admission::where('id',$id)->update(['status'=>'complete']);
+            return $this->responseSuccess('Application status change to complete');
         }catch (\Exception $exception)
         {
             return $this->responseError($exception->getMessage());

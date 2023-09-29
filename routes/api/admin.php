@@ -27,6 +27,11 @@ Route::middleware(['auth:api','admin'])->prefix('/v1/admin')->group(function (){
     Route::get('/get-result/{id}', [adminController::class, 'getResult']);
     Route::post('/search-result', [adminController::class, 'searchResult']);
 
+    Route::get('/pending-application', [adminController::class, 'pendingApplication']);
+    Route::get('/complete-application', [adminController::class, 'getCompleteApplication']);
+    Route::post('/complete-application/{id}', [adminController::class, 'completeApplication']);
+    Route::get('/get-application/{id}', [adminController::class, 'getApplication']);
+
 
 
 });
